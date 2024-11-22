@@ -5,13 +5,21 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Navbar from "../Customer-UI/components/Navbar";
 import Footer from "../Customer-UI/components/Footer";
 import { WishlistContext } from "./Context/WishlistContext";
+import ReviewSection from "./components/reviewSection"; // Import the new ReviewSection component
+
 
 const ProductDetails = () => {
+
+  // Extract the product ID from the URL parameters
   const { id } = useParams();
+
   const [product, setProduct] = useState(null);
   const [currentImage, setCurrentImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("M");
+  
+  //default quantity when add to cart
   const [quantity, setQuantity] = useState(1);
+
   const [relatedItems, setRelatedItems] = useState([]);
   const { addToWishlist } = useContext(WishlistContext);
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -46,6 +54,7 @@ const ProductDetails = () => {
       .catch((error) => console.error("Error fetching product:", error));
   }, [id]);
 
+  //check wishlist 
   useEffect(() => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     setIsInWishlist(wishlist.some((item) => item.id === parseInt(id)));
@@ -71,6 +80,7 @@ const ProductDetails = () => {
       quantity: quantity,
     };
 
+    //Add the product to the cart list the number of times specified by `quantity`
     for (let i = 0; i < quantity; i++) {
       cartList.push(newItem);
     }
@@ -246,6 +256,8 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+
+        <ReviewSection productId={id} />
 
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Related Items</h2>
